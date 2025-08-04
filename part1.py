@@ -13,7 +13,7 @@ class List:
             self.head = node
             return
         current = self.head
-        while current:
+        while current.next:
             current = current.next
         current.next = node
     
