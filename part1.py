@@ -24,7 +24,7 @@ class List:
             self.head = node
             return
         current = self.head
-        while current.next:
+        while current.next is not None:
             current = current.next
         current.next = node
     
