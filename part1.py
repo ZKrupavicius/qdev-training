@@ -44,7 +44,7 @@ class List:
     def __len__(self):
         count = 0
         current = self.head
-        while current:
+        while current is not None:
             count += 1
             current = current.next
         return count
@@ -135,7 +135,7 @@ lst.insert(5, 50)
 lst.remove(20)
 print(lst)
 print(lst.count(10))
-lst.pop(10)
+lst.pop(1)
 print(lst)
 lst.clear()
 print(lst)
