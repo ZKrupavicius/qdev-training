@@ -92,6 +92,7 @@ class List:
         idx = self._make_positive_index(idx)
         node = _Node(data)
         self._length += 1
+        
         if idx == 0:
             node.next_ = self._head
             self._head = node
@@ -99,6 +100,7 @@ class List:
             
         current = self._head
         count = 0
+        
         while current is not None and count < idx - 1:
             current = current.next_
             count += 1
@@ -116,6 +118,7 @@ class List:
         idx = self._make_positive_index(idx)
         current = self._head
         previous = None
+        
         for i in range(idx):
             previous = current
             current = current.next_
@@ -130,6 +133,7 @@ class List:
     
     def remove(self, data: any) -> None:
         previous = None
+        
         for node in self._node_iter():
             if node.data == data:
                 self._length -= 1
@@ -144,6 +148,7 @@ class List:
     def count(self, data: any) -> int:
         count = 0
         current = self._head
+        
         while current is not None:
             if current.data == data:
                 count += 1
@@ -164,6 +169,7 @@ class List:
         idx = self._make_positive_index(idx)
         current = self._head
         previous = None
+        
         for i in range(idx + 1):
             if i == idx:
                 self._length -= 1
@@ -184,6 +190,7 @@ class List:
     def _make_positive_index(self, idx: int) -> int:
         if idx < 0:
             idx = self._length + idx
+            
         if idx < 0 or idx > self._length:
             raise IndexError("Index out of range.")
         return idx
@@ -191,15 +198,18 @@ class List:
     def index(self, data: any, start: int = 0, end: Union[int, None] = None) -> int:
         current = self._head
         start = self._make_positive_index(start)
+        
         if end is None:
             end = self._length
         else:
             end = self._make_positive_index(end)
             
         count = 0
+        
         for i in range(start):
             current = current.next_
             count += 1
+            
         for j in range(start, end):
             if current.data == data:
                 return count
@@ -213,6 +223,7 @@ class List:
         
     def _node_iter(self) -> None:
         current = self._head
+        
         while current is not None:
             yield current
             current = current.next_
@@ -227,6 +238,7 @@ class List:
         idx = self._make_positive_index(idx)
         current = self._head
         count = 0
+        
         while current is not None:
             if count == idx:
                 current.data = data
