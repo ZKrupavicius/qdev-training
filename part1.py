@@ -1,18 +1,20 @@
+from typing import Union
+
 class _Node:
-    def __init__(self, data: any, next_ = None) -> None:
+    def __init__(self, data: any, next_: "_Node | None" = None) -> None:
         self.data = data
         self.next_ = next_
 
 class List:
     def __init__(self) -> None:
-        self._head: "None | _Node" = None
+        self._head: None | _Node = None
         self._length: int = 0
         
     def __str__(self):
-        return "[" + ", ".join(repr(data) for data in self._node_iter()) + "]"
+        return repr(self)
     
     def __repr__(self):
-        return str(self)
+        return "[" + ", ".join(repr(data) for data in self) + "]"
     
     def append(self, data: any) -> None:
         node = _Node(data)
@@ -27,7 +29,7 @@ class List:
             current = current.next_
         current.next_ = node
     
-    def __getitem__(self, idx: "int | slice") -> any:       
+    def __getitem__(self, idx: Union[int, slice]) -> any:       
         if isinstance(idx, slice):
             if idx.start is None:
                 _start = 0
@@ -45,7 +47,7 @@ class List:
                 _step = idx.step
                 
             current = self._head 
-            new_list = List()
+            new_list = self.__class__()
             for i in range(_start):
                 current = current.next_
             for j in range(_start,  _stop):
@@ -126,22 +128,18 @@ class List:
             previous.next_ = current.next_
         self._length -= 1
     
-    def remove (self, data: any) -> None:
-        current = self._head
+    def remove(self, data: any) -> None:
         previous = None
-        while current is not None:
-            if current.data == data:
+        for node in self._node_iter():
+            if node.data == data:
                 self._length -= 1
                 if previous is None:
-                    self._head = current.next_
+                    self._head = node.next_
                 else:
-                    previous.next_ = current.next_
+                    previous.next_ = node.next_
                 return
-            previous = current
-            current = current.next_
-            
-        if current is None:
-            raise ValueError ("Value not found")
+            previous = node
+        raise ValueError("Value not found")
     
     def count(self, data: any) -> int:
         count = 0
@@ -181,10 +179,7 @@ class List:
                 raise IndexError("List index out of range.")
             
     def copy(self) -> any:
-        new_list = List()
-        for data in self._node_iter():
-            new_list.append(data)
-        return new_list
+        return self[:]
         
     def _make_positive_index(self, idx: int) -> int:
         if idx < 0:
@@ -193,7 +188,7 @@ class List:
             raise IndexError("Index out of range.")
         return idx
         
-    def index(self, data: any, start: int = 0, end: "int | None" = None) -> int:
+    def index(self, data: any, start: int = 0, end: Union[int, None] = None) -> int:
         current = self._head
         start = self._make_positive_index(start)
         if end is None:
@@ -212,20 +207,18 @@ class List:
             count += 1
         raise ValueError ("There is no such item.")
     
-    def __iter__(self) -> any:
-        yield from self._node_iter()
+    def __iter__(self):
+        for node in self._node_iter():
+            yield node.data
         
     def _node_iter(self) -> None:
         current = self._head
         while current is not None:
-            yield current.data
+            yield current
             current = current.next_
             
     def __contains__(self, data: any) -> bool:
-        for item in self._node_iter():
-            if item == data:
-                return True
-        return False
+        return any(node.data == data for node in self._node_iter())
         
     def __setitem__(self, idx: int, data: any) -> None:
         if not isinstance(idx, int):
@@ -241,9 +234,9 @@ class List:
             current = current.next_
             count += 1
         raise IndexError("Index out of range.")
+    
+    def __eq__(self, other: object) -> bool:
+        if not isinstance(other, List):
+            return False
+        return list(self) == list(other)
             
-#    def reverse(self) -> any:
-#        current = self._head
-#        while current is not None:
-        
-           

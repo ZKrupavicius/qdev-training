@@ -168,3 +168,11 @@ def test_slice():
     assert str(lst[::2]) == "[10, 30, 50]"
     assert str(lst[-2:]) == "[50, 60]"
     assert str(lst[:-1]) == "[10, 20, 30, 40, 50]"
+    
+def test_equal():
+    lst = LIST()
+    lst2 = LIST()
+    assert lst == lst2
+    lst.extend([10, 20, 30, 40, 50, 60])
+    lst2.extend([10, 20, 30, 40, 50, 60])
+    assert lst == lst2
